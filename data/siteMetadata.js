@@ -1,3 +1,4 @@
+// @ts-check
 const siteMetadata = {
   title: 'recurse',
   author: 'zach bluedorn',
@@ -70,6 +71,8 @@ const siteMetadata = {
       // theme when dark mode
       darkTheme: '',
     },
+    inputPosition: undefined,
+    lang: undefined,
     disqusConfig: {
       // https://help.disqus.com/en/articles/1717111-what-s-a-shortname
       shortname: process.env.NEXT_PUBLIC_DISQUS_SHORTNAME,
