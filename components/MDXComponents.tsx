@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 import React from 'react'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import { ComponentMap } from 'mdx-bundler/client'
 import { coreContent } from '@/lib/utils/contentlayer'
 import Image from './Image'
 import CustomLink from './Link'
@@ -26,18 +25,23 @@ const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
   return <Layout content={content} {...rest} />
 }
 
-export const MDXComponents: ComponentMap = {
-  Image,
-  TOCInline,
-  a: CustomLink,
-  pre: Pre,
-  wrapper: Wrapper,
-  BlogNewsletterForm,
-}
-
 export const MDXLayoutRenderer = ({ layout, content, ...rest }: MDXLayout) => {
   const MDXLayout = useMDXComponent(content.body.code)
   const mainContent = coreContent(content)
 
-  return <MDXLayout layout={layout} content={mainContent} components={MDXComponents} {...rest} />
+  return (
+    <MDXLayout
+      layout={layout}
+      content={mainContent}
+      components={{
+        Image,
+        TOCInline,
+        a: CustomLink,
+        pre: Pre,
+        wrapper: Wrapper,
+        BlogNewsletterForm,
+      }}
+      {...rest}
+    />
+  )
 }

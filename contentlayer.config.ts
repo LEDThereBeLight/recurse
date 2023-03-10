@@ -27,6 +27,7 @@ const computedFields: ComputedFields = {
   },
   toc: { type: 'string', resolve: (doc) => extractTocHeadings(doc.body.raw) },
 }
+const string = { type: 'string' } as const
 
 export const Blog = defineDocumentType(() => ({
   name: 'Blog',
@@ -35,15 +36,15 @@ export const Blog = defineDocumentType(() => ({
   fields: {
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
-    tags: { type: 'list', of: { type: 'string' } },
+    tags: { type: 'list', of: string },
     lastmod: { type: 'date' },
     draft: { type: 'boolean' },
-    summary: { type: 'string' },
-    images: { type: 'list', of: { type: 'string' } },
-    authors: { type: 'list', of: { type: 'string' } },
-    layout: { type: 'string' },
-    bibliography: { type: 'string' },
-    canonicalUrl: { type: 'string' },
+    summary: string,
+    images: { type: 'list', of: string },
+    authors: { type: 'list', of: string },
+    layout: string,
+    bibliography: string,
+    canonicalUrl: string,
   },
   computedFields,
 }))
@@ -54,14 +55,14 @@ export const Authors = defineDocumentType(() => ({
   contentType: 'mdx',
   fields: {
     name: { type: 'string', required: true },
-    avatar: { type: 'string' },
-    occupation: { type: 'string' },
-    company: { type: 'string' },
-    email: { type: 'string' },
-    twitter: { type: 'string' },
-    linkedin: { type: 'string' },
-    github: { type: 'string' },
-    layout: { type: 'string' },
+    avatar: string,
+    occupation: string,
+    company: string,
+    email: string,
+    twitter: string,
+    linkedin: string,
+    github: string,
+    layout: string,
   },
   computedFields,
 }))

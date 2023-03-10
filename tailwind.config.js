@@ -7,7 +7,7 @@ const colors = require('tailwindcss/colors')
 /** @type {import("tailwindcss/tailwind-config").TailwindConfig } */
 module.exports = {
   experimental: {
-    optimizeUniversalDefaults: true,
+    optimizeUniversalDefaults: false,
   },
   content: [
     './pages/**/*.tsx',

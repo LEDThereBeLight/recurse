@@ -1,6 +1,6 @@
 import '@/css/tailwind.css'
 import '@/css/prism.css'
-import 'katex/dist/katex.css'
+// import 'katex/dist/katex.css'
 
 import '@fontsource/inter/variable-full.css'
 
@@ -16,6 +16,20 @@ interface Props extends AppProps {
   split?: boolean
 }
 
+export default function App({ Component, pageProps, split = false }: Props) {
+  return (
+    <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
+      <Head key={'app-meta'}>
+        <Meta key={'app-meta'} />
+      </Head>
+      <Analytics />
+      <LayoutWrapper split={split}>
+        <Component {...pageProps} />
+      </LayoutWrapper>
+    </ThemeProvider>
+  )
+}
+
 function getLayout(Component) {
   if (Component.getLayout) {
     return Component.getLayout
@@ -26,16 +40,7 @@ function getLayout(Component) {
   }
 }
 
-export default function App({ Component, pageProps, split = false }: Props) {
-  return (
-    <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
-      <Head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-      </Head>
-      <Analytics />
-      <LayoutWrapper split={split}>
-        <Component {...pageProps} />
-      </LayoutWrapper>
-    </ThemeProvider>
-  )
+function Meta() {
+  return <meta content="width=device-width, initial-scale=1" name="viewport" />
 }
+Meta.displayName = 'Meta'

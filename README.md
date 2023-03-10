@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD041 -->
+
 ![tailwind-nextjs-banner](/public/static/images/twitter-card.png)
 
 # Tailwind Nextjs Starter Blog
@@ -86,15 +88,15 @@ I wanted it to be nearly as feature-rich as popular blogging templates like [bea
 
 1. JS (official support)
 
-```bash
-npx degit https://github.com/timlrx/tailwind-nextjs-starter-blog.git
-```
+   ```bash
+   npx degit https://github.com/timlrx/tailwind-nextjs-starter-blog.git
+   ```
 
-or with TypeScript (community support)
+   or with TypeScript (community support)
 
-```bash
-npx degit timlrx/tailwind-nextjs-starter-blog#typescript
-```
+   ```bash
+   npx degit timlrx/tailwind-nextjs-starter-blog#typescript
+   ```
 
 2. Personalize `siteMetadata.js` (site related information)
 3. Modify the content security policy in `next.config.js` if you want to use
@@ -167,7 +169,7 @@ Frontmatter follows [Hugo's standards](https://gohugo.io/content-management/fron
 
 Currently 10 fields are supported.
 
-```
+```md
 title (required)
 date (required)
 tags (required, can be empty array)
@@ -182,7 +184,7 @@ canonicalUrl (optional, canonical url for the post for SEO)
 
 Here's an example of a post's frontmatter:
 
-```
+```md
 ---
 title: 'Introducing Tailwind Nexjs Starter Blog'
 date: '2021-01-12'
@@ -205,10 +207,10 @@ Follow the interactive prompt to generate a post with pre-filled front matter.
 
 ## Deploy
 
-**Vercel**  
+**Vercel**
 The easiest way to deploy the template is to use the [Vercel Platform](https://vercel.com) from the creators of Next.js. Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-**Netlify / GitHub Pages / Firebase etc.**  
+**Netlify / GitHub Pages / Firebase etc.**
 As the template uses `next/image` for image optimization, additional configurations have to be made to deploy on other popular static hosting websites like [Netlify](https://www.netlify.com/) or [GitHub Pages](https://pages.github.com/). An alternative image optimization provider such as Imgix, Cloudinary or Akamai has to be used. Alternatively, replace the `next/image` component with a standard `<img>` tag. See [`next/image` documentation](https://nextjs.org/docs/basic-features/image-optimization) for more details.
 
 The API routes used in the newsletter component cannot be used in a static site export. You will need to use a form API endpoint provider and substitute the route in the newsletter component accordingly. Other hosting platforms such as Netlify also offer alternative solutions - please refer to their docs for more information.

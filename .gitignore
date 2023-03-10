@@ -1,9 +1,12 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# yarn / dependencies
+# https://yarnpkg.com/getting-started/qa/#which-files-should-be-gitignored
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # testing
 /coverage
@@ -12,9 +15,9 @@
 /.next/
 /out/
 public/sitemap.xml
-.vercel
 
 # production
+.vercel
 /build
 *.xml
 # rss feed
@@ -34,7 +37,6 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-
 
 # Contentlayer
 .contentlayer
