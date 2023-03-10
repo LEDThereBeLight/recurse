@@ -12,10 +12,7 @@ const MAX_DISPLAY = 5
 
 export const getStaticProps = async () => {
   // TODO: move computation to get only the essential frontmatter to contentlayer.config
-  const sortedPosts = sortedBlogPost(allBlogs)
-  const posts = allCoreContent(sortedPosts)
-
-  return { props: { posts } }
+  return { props: { posts: allCoreContent(sortedBlogPost(allBlogs)) } }
 }
 
 export default function Home({ posts }: InferGetStaticPropsType<typeof getStaticProps>) {

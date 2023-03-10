@@ -13,59 +13,53 @@ export async function getStaticPaths() {
   }
 }
 
-export const getStaticProps = async ({ params }) => {
-  const slug = (params.slug as string[]).join('/')
-  const sortedPosts = sortedBlogPost(allBlogs)
-  const postIndex = sortedPosts.findIndex((p) => p.slug === slug)
-  // TODO: Refactor this extraction of coreContent
-  const prevContent = sortedPosts[postIndex + 1] || null
-  const prev = prevContent ? coreContent(prevContent) : null
-  const nextContent = sortedPosts[postIndex - 1] || null
-  const next = nextContent ? coreContent(nextContent) : null
-  const post = sortedPosts.find((p) => p.slug === slug)
-  const authorList = post.authors || ['default']
-  const authorDetails = authorList.map((author) => {
-    const authorResults = allAuthors.find((p) => p.slug === author)
-    return coreContent(authorResults)
-  })
+export const getStaticProps = async (props: { params: { slug: string[] } }) => {
+  const slug = props.params.slug.join('/')
+  const postIndex = sortedBlogPost(allBlogs).findIndex((p) => p.slug === slug)
+  const prevPost = sortedBlogPost(allBlogs)[postIndex + 1] || null
+  const nextPost = sortedBlogPost(allBlogs)[postIndex - 1] || null
+  const post = sortedBlogPost(allBlogs).find((p) => p.slug === slug)
 
   return {
     props: {
       post,
-      authorDetails,
-      prev,
-      next,
+      authorDetails: (post.authors || ['default']).map((author) =>
+        coreContent(allAuthors.find(({ slug }) => slug === author))
+      ),
+      prev: prevPost ? coreContent(prevPost) : null,
+      next: nextPost ? coreContent(nextPost) : null,
     },
   }
 }
 
-export default function Blog({
-  post,
-  authorDetails,
-  prev,
-  next,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Blog({ post, ...props }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const published = 'draft' in post && post.draft !== true
+
   return (
     <>
-      {'draft' in post && post.draft !== true ? (
+      {published ? (
         <MDXLayoutRenderer
           layout={post.layout || DEFAULT_LAYOUT}
           toc={post.toc}
           content={post}
-          authorDetails={authorDetails}
-          prev={prev}
-          next={next}
+          {...props}
         />
       ) : (
-        <div className="mt-24 text-center">
-          <PageTitle>
-            Under Construction{' '}
-            <span role="img" aria-label="roadwork sign">
-              🚧
-            </span>
-          </PageTitle>
-        </div>
+        <Draft />
       )}
     </>
+  )
+}
+
+function Draft() {
+  return (
+    <div className="mt-24 text-center">
+      <PageTitle>
+        Under Construction{' '}
+        <span role="img" aria-label="roadwork sign">
+          🚧
+        </span>
+      </PageTitle>
+    </div>
   )
 }

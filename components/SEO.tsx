@@ -46,10 +46,7 @@ const CommonSEO = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={twImage} />
-      <link
-        rel="canonical"
-        href={canonicalUrl ? canonicalUrl : `${siteMetadata.siteUrl}${router.asPath}`}
-      />
+      <link rel="canonical" href={canonicalUrl ?? `${siteMetadata.siteUrl}${router.asPath}`} />
     </Head>
   )
 }
@@ -60,22 +57,18 @@ interface PageSEOProps {
 }
 
 export const PageSEO = ({ title, description }: PageSEOProps) => {
-  const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
-  const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   return (
     <CommonSEO
       title={title}
       description={description}
       ogType="website"
-      ogImage={ogImageUrl}
-      twImage={twImageUrl}
+      ogImage={siteMetadata.siteUrl + siteMetadata.socialBanner}
+      twImage={siteMetadata.siteUrl + siteMetadata.socialBanner}
     />
   )
 }
 
 export const TagSEO = ({ title, description }: PageSEOProps) => {
-  const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
-  const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   const router = useRouter()
   return (
     <>
@@ -83,8 +76,8 @@ export const TagSEO = ({ title, description }: PageSEOProps) => {
         title={title}
         description={description}
         ogType="website"
-        ogImage={ogImageUrl}
-        twImage={twImageUrl}
+        ogImage={siteMetadata.siteUrl + siteMetadata.socialBanner}
+        twImage={siteMetadata.siteUrl + siteMetadata.socialBanner}
       />
       <Head>
         <link
@@ -115,34 +108,17 @@ export const BlogSEO = ({
 }: BlogSeoProps) => {
   const publishedAt = new Date(date).toISOString()
   const modifiedAt = new Date(lastmod || date).toISOString()
-  const imagesArr =
+
+  const featuredImages = (
     images.length === 0
       ? [siteMetadata.socialBanner]
       : typeof images === 'string'
       ? [images]
       : images
-
-  const featuredImages = imagesArr.map((img) => {
-    return {
-      '@type': 'ImageObject',
-      url: `${siteMetadata.siteUrl}${img}`,
-    }
-  })
-
-  let authorList
-  if (authorDetails) {
-    authorList = authorDetails.map((author) => {
-      return {
-        '@type': 'Person',
-        name: author.name,
-      }
-    })
-  } else {
-    authorList = {
-      '@type': 'Person',
-      name: siteMetadata.author,
-    }
-  }
+  ).map((img) => ({
+    '@type': 'ImageObject',
+    url: `${siteMetadata.siteUrl}${img}`,
+  }))
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -155,7 +131,13 @@ export const BlogSEO = ({
     image: featuredImages,
     datePublished: publishedAt,
     dateModified: modifiedAt,
-    author: authorList,
+    author: authorDetails?.map((author) => ({
+      '@type': 'Person',
+      name: author.name,
+    })) ?? {
+      '@type': 'Person',
+      name: siteMetadata.author,
+    },
     publisher: {
       '@type': 'Organization',
       name: siteMetadata.author,
@@ -167,8 +149,6 @@ export const BlogSEO = ({
     description: summary,
   }
 
-  const twImageUrl = featuredImages[0].url
-
   return (
     <>
       <CommonSEO
@@ -176,7 +156,7 @@ export const BlogSEO = ({
         description={summary}
         ogType="article"
         ogImage={featuredImages}
-        twImage={twImageUrl}
+        twImage={featuredImages[0].url}
         canonicalUrl={canonicalUrl}
       />
       <Head>

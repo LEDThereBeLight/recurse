@@ -27,15 +27,17 @@ export function HeaderTitleLink() {
   )
 }
 
-export function NavLink(props: {
-  link: { href: string; title: boolean | ReactChild | ReactFragment | ReactPortal }
+export function NavLink({
+  link,
+}: {
+  link: {
+    href: string
+    title: boolean | ReactChild | ReactFragment | ReactPortal
+  }
 }) {
   return (
-    <Link
-      href={props.link.href}
-      className="p-1 font-medium text-gray-900 dark:text-gray-100 sm:p-4"
-    >
-      {props.link.title}
+    <Link href={link.href} className="p-1 font-medium text-gray-900 dark:text-gray-100 sm:p-4">
+      {link.title}
     </Link>
   )
 }
@@ -45,7 +47,7 @@ export function HeaderNav() {
     <div className="flex items-center text-base leading-5">
       <div className="hidden sm:block">
         {headerNavLinks.map((link) => (
-          <NavLink key={link.title} link={link}></NavLink>
+          <NavLink key={link.title} link={link} />
         ))}
       </div>
       <ThemeSwitch />

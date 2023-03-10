@@ -37,15 +37,14 @@ const TOCInline = ({
     : new RegExp('^(' + exclude + ')$', 'i')
 
   const filteredToc = toc.filter(
-    (heading) =>
-      heading.depth >= fromHeading && heading.depth <= toHeading && !re.test(heading.value)
+    ({ depth, value }) => depth >= fromHeading && depth <= toHeading && !re.test(value)
   )
 
   const tocList = (
     <ul>
-      {filteredToc.map((heading) => (
-        <li key={heading.value} className={`${heading.depth >= indentDepth && 'ml-6'}`}>
-          <a href={heading.url}>{heading.value}</a>
+      {filteredToc.map(({ value, depth, url }) => (
+        <li key={value} className={`${depth >= indentDepth && 'ml-6'}`}>
+          <a href={url}>{value}</a>
         </li>
       ))}
     </ul>

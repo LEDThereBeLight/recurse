@@ -1,10 +1,7 @@
-// @ts-check
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
-/** @type {import("tailwindcss/tailwind-config").TailwindConfig } */
+/** @type {import("tailwindcss").Config } */
 module.exports = {
   experimental: {
     optimizeUniversalDefaults: false,
@@ -29,14 +26,15 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        //@ts-ignore
         sans: ['InterVariable', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: colors.teal,
         gray: colors.neutral,
       },
-      typography: (theme) => ({
+      typography: (
+        /** @type {(theme: ReturnType<typeof defaultTheme>) => typeof defaultTheme} */ theme
+      ) => ({
         DEFAULT: {
           css: {
             color: theme('colors.gray.700'),

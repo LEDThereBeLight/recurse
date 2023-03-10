@@ -9,15 +9,13 @@ import Pre from './Pre'
 import { BlogNewsletterForm } from './NewsletterForm'
 import type { Blog, Authors } from 'contentlayer/generated'
 
-interface MDXLayout {
+interface MDXLayout extends Record<string, unknown> {
   layout: string
   content: Blog | Authors
-  [key: string]: unknown
 }
 
-interface Wrapper {
+interface Wrapper extends Record<string, unknown> {
   layout: string
-  [key: string]: unknown
 }
 
 const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
@@ -27,12 +25,11 @@ const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
 
 export const MDXLayoutRenderer = ({ layout, content, ...rest }: MDXLayout) => {
   const MDXLayout = useMDXComponent(content.body.code)
-  const mainContent = coreContent(content)
 
   return (
     <MDXLayout
       layout={layout}
-      content={mainContent}
+      content={coreContent(content)}
       components={{
         Image,
         TOCInline,

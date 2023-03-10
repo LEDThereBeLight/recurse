@@ -7,57 +7,43 @@ import { InferGetStaticPropsType } from 'next'
 import { allBlogs } from 'contentlayer/generated'
 import { sortedBlogPost } from '../../../lib/utils/contentlayer'
 
-export const getStaticPaths = async () => {
-  const totalPosts = allBlogs
-  const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE)
-  const paths = Array.from({ length: totalPages }, (_, i) => ({
-    params: { page: (i + 1).toString() },
-  }))
-
-  return {
-    paths,
-    fallback: false,
-  }
+function totalPages(blogPosts: number, postsPerPage = POSTS_PER_PAGE) {
+  return Math.ceil(blogPosts / postsPerPage)
 }
 
-export const getStaticProps = async (context) => {
+export const getStaticPaths = async () => ({
+  paths: Array.from({ length: totalPages(allBlogs.length) }, (_, i) => ({
+    params: { page: `${i + 1}` },
+  })),
+  fallback: false,
+})
+
+export const getStaticProps = async (context: { params: { page: string } }) => {
   const {
     params: { page },
   } = context
   const posts = sortedBlogPost(allBlogs)
-  const pageNumber = parseInt(page as string)
-  const initialDisplayPosts = posts.slice(
-    POSTS_PER_PAGE * (pageNumber - 1),
-    POSTS_PER_PAGE * pageNumber
-  )
-  const pagination = {
-    currentPage: pageNumber,
-    totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
-  }
+  const currentPage = parseInt(page)
 
   return {
     props: {
-      initialDisplayPosts: allCoreContent(initialDisplayPosts),
+      initialDisplayPosts: allCoreContent(
+        posts.slice(POSTS_PER_PAGE * (currentPage - 1), POSTS_PER_PAGE * currentPage)
+      ),
       posts: allCoreContent(posts),
-      pagination,
+      pagination: {
+        currentPage,
+        totalPages: totalPages(posts.length),
+      },
     },
   }
 }
 
-export default function PostPage({
-  posts,
-  initialDisplayPosts,
-  pagination,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function PostPage(props: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
-      <ListLayout
-        posts={posts}
-        initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
-        title="All Posts"
-      />
+      <ListLayout {...props} title="All Posts" />
     </>
   )
 }

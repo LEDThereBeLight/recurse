@@ -9,11 +9,9 @@ import { allBlogs } from 'contentlayer/generated'
 
 // TODO: refactor into contentlayer once compute over all docs is enabled
 
-export const getStaticProps: GetStaticProps<{ tags: Record<string, number> }> = async () => {
-  const tags = await getAllTags(allBlogs)
-
-  return { props: { tags } }
-}
+export const getStaticProps: GetStaticProps<{ tags: Record<string, number> }> = async () => ({
+  props: { tags: await getAllTags(allBlogs) },
+})
 
 export default function Tags({ tags }: InferGetStaticPropsType<typeof getStaticProps>) {
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])

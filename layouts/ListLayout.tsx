@@ -15,8 +15,8 @@ interface Props {
 
 export default function ListLayout({ posts, title, initialDisplayPosts = [], pagination }: Props) {
   const [searchValue, setSearchValue] = useState('')
-  const filteredBlogPosts = posts.filter((post) => {
-    const searchContent = post.title + post.summary + post.tags.join(' ')
+  const filteredBlogPosts = posts.filter(({ title, summary, tags }) => {
+    const searchContent = title + summary + tags.join(' ')
     return searchContent.toLowerCase().includes(searchValue.toLowerCase())
   })
 
@@ -57,8 +57,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
         </div>
         <ul>
           {!filteredBlogPosts.length && 'No posts found.'}
-          {displayPosts.map((post) => {
-            const { slug, date, title, summary, tags } = post
+          {displayPosts.map(({ slug, date, title, summary, tags }) => {
             return (
               <li key={slug} className="py-4">
                 <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
@@ -91,7 +90,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
           })}
         </ul>
       </div>
-      {pagination && pagination.totalPages > 1 && !searchValue && (
+      {pagination?.totalPages > 1 && !searchValue && (
         <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
       )}
     </>
